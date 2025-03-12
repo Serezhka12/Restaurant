@@ -3,18 +3,11 @@ using MediatR;
 
 namespace Application.Products.Commands.UpdateProduct;
 
-public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
+public class UpdateProductCommandHandler(IProductRepository productRepository) : IRequestHandler<UpdateProductCommand>
 {
-    private readonly IProductRepository _productRepository;
-
-    public UpdateProductCommandHandler(IProductRepository productRepository)
-    {
-        _productRepository = productRepository;
-    }
-
     public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(request.Id, cancellationToken);
+        var product = await productRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (product == null)
         {
@@ -25,6 +18,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
         product.Description = request.Description;
         product.MinimumQuantity = request.MinimumQuantity;
 
-        await _productRepository.UpdateAsync(product, cancellationToken);
+        await productRepository.UpdateAsync(product, cancellationToken);
     }
 }

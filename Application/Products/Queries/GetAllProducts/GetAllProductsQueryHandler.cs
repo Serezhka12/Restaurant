@@ -15,14 +15,22 @@ public class GetAllProductsQueryHandler(IProductRepository productRepository)
         {
             var productDto = new ProductDto
             {
-                TotalQuantity = productRepository.GetTotalQuantity(product),
-                AvailableQuantity = productRepository.GetAvailableQuantity(product),
-                IsLowOnStock = productRepository.IsLowOnStock(product),
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                TotalQuantity = product.GetTotalQuantity(),
+                AvailableQuantity = product.GetAvailableQuantity(),
+                IsLowOnStock = product.IsLowOnStock(),
                 StorageItems = product.StorageItems.Select(si =>
                 {
                     var storageItemDto = new StorageItemDto
                     {
-                        IsExpired = productRepository.IsExpired(si)
+                        Id = si.Id,
+                        Quantity = si.Quantity,
+                        ReceivedDate = si.ReceivedDate,
+                        ExpiryDate = si.ExpiryDate,
+                        PurchasePrice = si.PurchasePrice,
+                        IsExpired = si.IsExpired()
                     };
                     return storageItemDto;
                 }).ToList()

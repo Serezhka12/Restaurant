@@ -1,10 +1,11 @@
+using Application.Common.Interfaces;
 using Domain.Entities.Products;
 using Infrastructure.Products.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Common;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IApplicationDbContext
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<StorageItem> StorageItems { get; set; }

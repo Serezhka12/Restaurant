@@ -6,7 +6,7 @@ public class ApiResponse<T>
     public T? Data { get; set; }
     public string? Error { get; set; }
 
-    public static ApiResponse<T> Success(T data, int statusCode = 200)
+    public static ApiResponse<T> Success(T? data, int statusCode = 200)
     {
         return new ApiResponse<T>
         {

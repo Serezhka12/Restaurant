@@ -9,4 +9,9 @@ public class StorageItem
     public DateTime ExpiryDate { get; set; }
     public decimal PurchasePrice { get; set; }
     public Product Product { get; set; } = null!;
+
+    public bool IsExpired()
+    {
+        return ExpiryDate < DateTime.UtcNow;
+    }
 }

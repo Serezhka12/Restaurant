@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration["DatabaseConnection"]));
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IApplicationDbContext, AppDbContext>();
 
         return services;
     }

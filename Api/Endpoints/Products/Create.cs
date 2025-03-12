@@ -2,7 +2,6 @@ using Application.Products.Commands.CreateProduct;
 using MapsterMapper;
 using MediatR;
 using Shared.Dtos.Products;
-using Api.Extensions;
 
 namespace Api.Endpoints.Products;
 
@@ -14,7 +13,7 @@ internal sealed class Create : IEndpoint
         {
             var command = mapper.Map<CreateProductCommand>(dto);
             var id = await sender.Send(command, cancellationToken);
-            return Results.Extensions.ApiResponse(new { Id = id }, 201);
+            return Results.Created($"/products/{id}", new { Id = id });
         }).WithTags(Tags.Products);
     }
 }
