@@ -9,11 +9,11 @@ internal sealed class Create : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("products", async (CreateProductDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
+        app.MapPost(Routes.Products.Base, async (CreateProductDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
         {
             var command = mapper.Map<CreateProductCommand>(dto);
             var id = await sender.Send(command, cancellationToken);
-            return Results.Created($"/products/{id}", new { Id = id });
+            return Results.Created($"/{Routes.Products.Base}/{id}", new { Id = id });
         }).WithTags(Tags.Products);
     }
 }

@@ -9,7 +9,7 @@ internal sealed class AddToStorage : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("products/{id}/storage", async (int id, AddStorageItemDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
+        app.MapPost(Routes.Products.Storage, async (int id, AddStorageItemDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
         {
             var command = mapper.Map<AddStorageItemCommand>(dto);
             command = command with { ProductId = id };

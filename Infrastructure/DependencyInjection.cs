@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Infrastructure.Common;
 using Infrastructure.Products;
+using Infrastructure.Staff;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration["DatabaseConnection"]));
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IApplicationDbContext, AppDbContext>();
 
         return services;

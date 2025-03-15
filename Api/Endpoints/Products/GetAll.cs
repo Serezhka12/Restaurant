@@ -7,7 +7,7 @@ internal sealed class GetAll: IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("products", async (ISender sender, CancellationToken cancellationToken) =>
+        app.MapGet(Routes.Products.Base, async (ISender sender, CancellationToken cancellationToken) =>
         {
             var products = await sender.Send(new GetAllProductsQuery(), cancellationToken);
             return Results.Ok(products);
