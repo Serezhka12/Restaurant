@@ -9,7 +9,7 @@ internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("products/{id}", async (int id, UpdateProductDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
+        app.MapPut(Routes.Products.ById, async (int id, UpdateProductDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
         {
             var command = mapper.Map<UpdateProductCommand>(dto);
             command = command with { Id = id };

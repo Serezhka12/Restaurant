@@ -9,7 +9,6 @@ public class Product
     public decimal MinimumQuantity { get; set; }
     public List<StorageItem> StorageItems { get; set; } = new List<StorageItem>();
 
-    // Перенесені методи бізнес-логіки
     public decimal GetTotalQuantity()
     {
         return StorageItems.Sum(si => si.Quantity);

@@ -9,7 +9,7 @@ internal sealed class UseProduct : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("products/{id}/use", async (int id, UseProductDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
+        app.MapPost(Routes.Products.Use, async (int id, UseProductDto dto, IMapper mapper, ISender sender, CancellationToken cancellationToken) =>
         {
             var command = mapper.Map<UseProductCommand>(dto);
             command = command with { ProductId = id };
