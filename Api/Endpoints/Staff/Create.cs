@@ -16,4 +16,4 @@ internal sealed class Create : IEndpoint
             return Results.Created($"/{Routes.Staff.Base}/{id}", new { Id = id });
         }).WithTags(Tags.Staff);
     }
-} 
+}

@@ -13,7 +13,7 @@ internal sealed class UseProduct : IEndpoint
         {
             var command = mapper.Map<UseProductCommand>(dto);
             command = command with { ProductId = id };
-            
+
             await sender.Send(command, cancellationToken);
             return Results.NoContent();
         }).WithTags(Tags.Products);

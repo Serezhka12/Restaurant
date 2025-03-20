@@ -13,7 +13,7 @@ internal sealed class AddToStorage : IEndpoint
         {
             var command = mapper.Map<AddStorageItemCommand>(dto);
             command = command with { ProductId = id };
-            
+
             await sender.Send(command, cancellationToken);
             return Results.NoContent();
         }).WithTags(Tags.Products);

@@ -10,4 +10,4 @@ public class ProductDto
     public decimal AvailableQuantity { get; set; }
     public bool IsLowOnStock { get; set; }
     public List<StorageItemDto> StorageItems { get; set; } = new List<StorageItemDto>();
-} 
+}

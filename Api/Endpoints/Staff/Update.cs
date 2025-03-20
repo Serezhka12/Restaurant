@@ -13,9 +13,9 @@ internal sealed class Update : IEndpoint
         {
             var command = mapper.Map<UpdateStaffCommand>(dto);
             command = command with { Id = id };
-            
+
             await sender.Send(command, cancellationToken);
             return Results.NoContent();
         }).WithTags(Tags.Staff);
     }
-} 
+}

@@ -84,6 +84,52 @@ namespace Infrastructure.Migrations
                     b.ToTable("StorageItems");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Reservation.Table", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsFree")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Seats")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tables");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Reservation.TableReservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NumberOfPeople")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservationDate");
+
+                    b.HasIndex("TableId", "ReservationDate")
+                        .IsUnique();
+
+                    b.ToTable("TableReservations");
+                });
+
             modelBuilder.Entity("Domain.Entities.Staff.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -134,6 +180,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Reservation.TableReservation", b =>
+                {
+                    b.HasOne("Domain.Entities.Reservation.Table", "Table")
+                        .WithMany("Reservations")
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Table");
+                });
+
             modelBuilder.Entity("Domain.Entities.Staff.EmployeeWorkDay", b =>
                 {
                     b.HasOne("Domain.Entities.Staff.Employee", "Employee")
@@ -148,6 +205,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Products.Product", b =>
                 {
                     b.Navigation("StorageItems");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Reservation.Table", b =>
+                {
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("Domain.Entities.Staff.Employee", b =>
