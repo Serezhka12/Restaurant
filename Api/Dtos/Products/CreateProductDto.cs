@@ -6,4 +6,4 @@ public class CreateProductDto
     public string Description { get; set; } = string.Empty;
     public string Unit { get; set; } = string.Empty;
     public decimal MinimumQuantity { get; set; }
-} 
+}

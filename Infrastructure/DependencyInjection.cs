@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Infrastructure.Common;
 using Infrastructure.Products;
+using Infrastructure.Reservation;
 using Infrastructure.Staff;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,8 @@ public static class DependencyInjection
 
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<ITableRepository, TableRepository>();
+        services.AddScoped<IReservationRepository, ReservationRepository>();
         services.AddScoped<IApplicationDbContext, AppDbContext>();
 
         return services;

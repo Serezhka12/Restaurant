@@ -8,4 +8,4 @@ public class StorageItemDto
     public DateTime ExpiryDate { get; set; }
     public decimal PurchasePrice { get; set; }
     public bool IsExpired { get; set; }
-} 
+}
