@@ -17,20 +17,20 @@ public static class Routes
         public const string ById = "staff/{id}";
         public const string ByDay = "staff/by-day/{day}";
     }
-    
+
     public static class Tables
     {
         public const string Base = "tables";
         public const string ById = "tables/{id}";
         public const string Status = "tables/{id}/status";
     }
-    
+
     public static class Reservations
     {
         public const string Base = "reservations";
         public const string ById = "reservations/{id}";
-        public const string ByDate = "reservations/by-date/{date}";
-        public const string Reserve = "reservations/reserve";
+        public const string ByDate = "reservations/by-date";
+        public const string Reserve = "reservations";
         public const string Cancel = "reservations/{id}/cancel";
     }
-} 
+}
