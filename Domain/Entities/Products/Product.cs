@@ -1,3 +1,5 @@
+using Domain.Entities.Menu;
+
 namespace Domain.Entities.Products;
 
 public class Product
@@ -7,7 +9,8 @@ public class Product
     public string Description { get; set; } = string.Empty;
     public string Unit { get; set; } = string.Empty;
     public decimal MinimumQuantity { get; set; }
-    public List<StorageItem> StorageItems { get; set; } = new List<StorageItem>();
+    public List<StorageItem> StorageItems { get; set; } = [];
+    public List<MenuPosition> MenuPositions { get; set; } = [];
 
     public decimal GetTotalQuantity()
     {

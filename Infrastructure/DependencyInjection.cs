@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Infrastructure.Common;
+using Infrastructure.Menu;
 using Infrastructure.Products;
 using Infrastructure.Reservation;
 using Infrastructure.Staff;
@@ -29,6 +30,9 @@ public static class DependencyInjection
         services.AddScoped<ITableRepository, TableRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
         services.AddScoped<IApplicationDbContext, AppDbContext>();
+        services.AddScoped<IMenuCategoryRepository, MenuCategoryRepository>();
+        services.AddScoped<IAllergensRepository, AllergensRepository>();
+        services.AddScoped<IMenuPositionRepository, MenuPositionRepository>();
 
         return services;
     }
