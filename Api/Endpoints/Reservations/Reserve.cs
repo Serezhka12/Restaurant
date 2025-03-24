@@ -1,7 +1,7 @@
+using Api.Dtos.Reservation;
 using Application.Reservation.Commands.ReserveTable;
 using MapsterMapper;
 using MediatR;
-using Shared.Dtos.Reservation;
 
 namespace Api.Endpoints.Reservations;
 

@@ -1,4 +1,6 @@
-namespace Shared.Dtos.Reservation;
+using Api.Dtos.Reservation;
+
+namespace Api.Dtos.Tables;
 
 public class TableDto
 {

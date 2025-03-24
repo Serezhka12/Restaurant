@@ -1,10 +1,4 @@
-namespace Shared.Dtos.Menu;
-
-public class AllergensDto
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-}
+namespace Api.Dtos.Menu;
 
 public class CreateAllergensDto
 {
@@ -14,4 +8,4 @@ public class CreateAllergensDto
 public class UpdateAllergensDto
 {
     public string Name { get; set; } = string.Empty;
-} 
+}

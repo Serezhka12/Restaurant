@@ -1,7 +1,7 @@
+using Api.Dtos.Tables;
 using Application.Tables.Commands.UpdateTableStatus;
 using MapsterMapper;
 using MediatR;
-using Shared.Dtos.Reservation;
 
 namespace Api.Endpoints.Tables;
 

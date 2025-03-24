@@ -1,4 +1,4 @@
-namespace Shared.Dtos.Products;
+namespace Api.Dtos.Products;
 
 public class StorageItemDto
 {

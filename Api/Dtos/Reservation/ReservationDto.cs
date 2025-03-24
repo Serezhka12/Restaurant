@@ -1,4 +1,4 @@
-namespace Shared.Dtos.Reservation;
+namespace Api.Dtos.Reservation;
 
 public class ReservationDto
 {

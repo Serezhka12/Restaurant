@@ -1,6 +1,6 @@
 using Domain.Entities.Staff;
 
-namespace Shared.Dtos.Staff;
+namespace Api.Dtos.Staff;
 
 public class StaffDto
 {

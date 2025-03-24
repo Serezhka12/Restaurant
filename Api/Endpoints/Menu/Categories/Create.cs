@@ -1,7 +1,7 @@
+using Api.Dtos.Menu;
 using Application.Menu.Commands.CreateMenuCategory;
 using MapsterMapper;
 using MediatR;
-using Shared.Dtos.Menu;
 
 namespace Api.Endpoints.Menu.Categories;
 
