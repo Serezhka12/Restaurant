@@ -10,6 +10,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.HasKey(p => p.Id);
 
+        builder.Property(x => x.Id)
+            .UseIdentityColumn();
+
         builder.Property(p => p.Name)
             .IsRequired()
             .HasMaxLength(100);

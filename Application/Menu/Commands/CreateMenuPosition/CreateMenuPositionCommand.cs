@@ -8,4 +8,5 @@ public record CreateMenuPositionCommand(
     bool IsAvailable,
     List<int> AllergenIds,
     int MenuCategoryId,
-    List<int> ProductIds) : IRequest<int>; 
+    decimal Price,
+    List<int> ProductIds) : IRequest<int>;

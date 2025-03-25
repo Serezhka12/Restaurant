@@ -10,4 +10,5 @@ public interface IMenuPositionRepository
     Task UpdateAsync(MenuPosition position, CancellationToken cancellationToken = default);
     Task DeleteAsync(int id, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
+    Task<List<Domain.Entities.Menu.MenuPosition>> GetAllByCategoryIdAsync(int categoryId, CancellationToken cancellationToken);
 } 

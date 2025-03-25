@@ -29,6 +29,10 @@ public class MenuPositionConfiguration : IEntityTypeConfiguration<MenuPosition>
         builder.Property(x => x.MenuCategoryId)
             .IsRequired();
 
+        builder.Property(x => x.Price)
+            .IsRequired()
+            .HasColumnType("decimal(18,2)");
+
         builder.HasMany(x => x.Products)
             .WithMany(x => x.MenuPositions)
             .UsingEntity<Dictionary<string, object>>(

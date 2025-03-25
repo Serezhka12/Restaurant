@@ -40,11 +40,12 @@ public class UpdateMenuPositionCommandHandler : IRequestHandler<UpdateMenuPositi
         position.Name = request.Name;
         position.IsVegan = request.IsVegan;
         position.IsAvailable = request.IsAvailable;
+        position.Price = request.Price;
         position.MenuCategoryId = request.MenuCategoryId;
 
-        // Оновлюємо алергени
+
         position.Allergens.Clear();
-        if (request.AllergenIds.Any())
+        if (request.AllergenIds.Count != 0)
         {
             foreach (var allergenId in request.AllergenIds)
             {
@@ -57,9 +58,8 @@ public class UpdateMenuPositionCommandHandler : IRequestHandler<UpdateMenuPositi
             }
         }
 
-        // Оновлюємо продукти
         position.Products.Clear();
-        if (request.ProductIds.Any())
+        if (request.ProductIds.Count != 0)
         {
             foreach (var productId in request.ProductIds)
             {
@@ -74,4 +74,4 @@ public class UpdateMenuPositionCommandHandler : IRequestHandler<UpdateMenuPositi
 
         await _menuPositionRepository.UpdateAsync(position, cancellationToken);
     }
-} 
+}

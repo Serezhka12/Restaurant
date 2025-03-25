@@ -10,6 +10,9 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {
         builder.HasKey(s => s.Id);
 
+        builder.Property(x => x.Id)
+            .UseIdentityColumn();
+
         builder.Property(s => s.Name)
             .IsRequired()
             .HasMaxLength(100);

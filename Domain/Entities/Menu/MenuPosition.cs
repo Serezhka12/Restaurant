@@ -8,6 +8,7 @@ public class MenuPosition
     public string Name { get; set; }
     public bool IsVegan { get; set; }
     public bool IsAvailable { get; set; }
+    public decimal Price { get; set; }
     public List<Allergens> Allergens { get; set; } = [];
     public MenuCategory MenuCategory { get; set; }
     public int MenuCategoryId { get; set; }

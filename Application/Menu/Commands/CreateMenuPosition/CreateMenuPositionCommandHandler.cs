@@ -38,12 +38,12 @@ public class CreateMenuPositionCommandHandler : IRequestHandler<CreateMenuPositi
             IsVegan = request.IsVegan,
             IsAvailable = request.IsAvailable,
             MenuCategoryId = request.MenuCategoryId,
-            Allergens = new List<Allergens>(),
-            Products = new List<Domain.Entities.Products.Product>()
+            Price = request.Price,
+            Allergens = [],
+            Products = []
         };
 
-        // Додаємо алергени
-        if (request.AllergenIds.Any())
+        if (request.AllergenIds.Count != 0)
         {
             foreach (var allergenId in request.AllergenIds)
             {
@@ -56,20 +56,17 @@ public class CreateMenuPositionCommandHandler : IRequestHandler<CreateMenuPositi
             }
         }
 
-        // Додаємо продукти
-        if (request.ProductIds.Any())
+        if (request.ProductIds.Count == 0) return await _menuPositionRepository.AddAsync(position, cancellationToken);
+        foreach (var productId in request.ProductIds)
         {
-            foreach (var productId in request.ProductIds)
+            var product = await _productRepository.GetByIdAsync(productId, cancellationToken);
+            if (product == null)
             {
-                var product = await _productRepository.GetByIdAsync(productId, cancellationToken);
-                if (product == null)
-                {
-                    throw new NotFoundException($"Продукт з ID {productId} не знайдений");
-                }
-                position.Products.Add(product);
+                throw new NotFoundException($"Продукт з ID {productId} не знайдений");
             }
+            position.Products.Add(product);
         }
 
         return await _menuPositionRepository.AddAsync(position, cancellationToken);
     }
-} 
+}

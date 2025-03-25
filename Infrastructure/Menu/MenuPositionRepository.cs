@@ -49,26 +49,25 @@ public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
         if (existingPosition != null)
         {
             _context.Entry(existingPosition).CurrentValues.SetValues(position);
-            
+
             existingPosition.Allergens.Clear();
             foreach (var allergen in position.Allergens)
             {
                 existingPosition.Allergens.Add(allergen);
             }
-            
+
             existingPosition.Products.Clear();
             foreach (var product in position.Products)
             {
                 existingPosition.Products.Add(product);
             }
-            
-            await SaveChangesAsync(cancellationToken);
         }
         else
         {
             _context.MenuPositions.Update(position);
-            await SaveChangesAsync(cancellationToken);
         }
+
+        await SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
@@ -85,4 +84,11 @@ public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
     {
         return await _context.MenuPositions.AnyAsync(x => x.Id == id, cancellationToken);
     }
-} 
+
+    public async Task<List<MenuPosition>> GetAllByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
+    {
+        return await _context.MenuPositions
+            .Where(p => p.MenuCategoryId == categoryId)
+            .ToListAsync(cancellationToken);
+    }
+}

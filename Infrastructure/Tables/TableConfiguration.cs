@@ -10,6 +10,9 @@ public class TableConfiguration : IEntityTypeConfiguration<Table>
     {
         builder.HasKey(t => t.Id);
 
+        builder.Property(x => x.Id)
+            .UseIdentityColumn();
+
         builder.Property(t => t.Seats)
             .IsRequired();
 

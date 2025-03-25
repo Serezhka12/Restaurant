@@ -9,4 +9,5 @@ public record UpdateMenuPositionCommand(
     bool IsAvailable,
     List<int> AllergenIds,
     int MenuCategoryId,
-    List<int> ProductIds) : IRequest; 
+    decimal Price,
+    List<int> ProductIds) : IRequest;
