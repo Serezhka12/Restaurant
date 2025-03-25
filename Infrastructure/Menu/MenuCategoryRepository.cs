@@ -24,7 +24,6 @@ public class MenuCategoryRepository : RepositoryBase, IMenuCategoryRepository
     public async Task<List<MenuCategory>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _context.MenuCategories
-            .Include(x => x.Positions)
             .ToListAsync(cancellationToken);
     }
 
@@ -55,4 +54,4 @@ public class MenuCategoryRepository : RepositoryBase, IMenuCategoryRepository
     {
         return await _context.MenuCategories.AnyAsync(x => x.Id == id, cancellationToken);
     }
-} 
+}

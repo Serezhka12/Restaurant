@@ -89,6 +89,8 @@ public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
     {
         return await _context.MenuPositions
             .Where(p => p.MenuCategoryId == categoryId)
+            .Include(x => x.Allergens)
+            .Include(x => x.Products)
             .ToListAsync(cancellationToken);
     }
 }

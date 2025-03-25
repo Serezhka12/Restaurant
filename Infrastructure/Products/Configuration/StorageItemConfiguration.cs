@@ -22,5 +22,10 @@ public class StorageItemConfiguration : IEntityTypeConfiguration<StorageItem>
 
         builder.Property(si => si.ExpiryDate)
             .IsRequired();
+
+        builder.HasOne(si => si.Product)
+            .WithMany(p => p.StorageItems)
+            .HasForeignKey(si => si.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

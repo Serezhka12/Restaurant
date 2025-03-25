@@ -44,5 +44,6 @@ public static class Routes
         
         public const string Positions = "menu/positions";
         public const string PositionById = "menu/positions/{id}";
+        public const string PositionsByCategory = "menu/positions-by-category";
     }
 }
