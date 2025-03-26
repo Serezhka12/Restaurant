@@ -33,4 +33,17 @@ public static class Routes
         public const string Reserve = "reservations";
         public const string Cancel = "reservations/{id}/cancel";
     }
+
+    public static class Menu
+    {
+        public const string Categories = "menu/categories";
+        public const string CategoryById = "menu/categories/{id}";
+
+        public const string Allergens = "menu/allergens";
+        public const string AllergenById = "menu/allergens/{id}";
+
+        public const string Positions = "menu/positions";
+        public const string PositionById = "menu/positions/{id}";
+        public const string GetMenu = "menu";
+    }
 }

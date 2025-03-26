@@ -4,7 +4,9 @@ using Shared.Exceptions;
 
 namespace Application.Reservation.Commands.CancelReservation;
 
-public class CancelReservationCommandHandler(IReservationRepository reservationRepository)
+public record CancelReservationCommand(int ReservationId) : IRequest;
+
+public class CancelReservationCommandHandler(IReservationRepository reservationRepository, IApplicationDbContext dbContext)
     : IRequestHandler<CancelReservationCommand>
 {
     public async Task Handle(CancelReservationCommand request, CancellationToken cancellationToken)
@@ -17,5 +19,6 @@ public class CancelReservationCommandHandler(IReservationRepository reservationR
         }
 
         await reservationRepository.DeleteAsync(request.ReservationId, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 } 

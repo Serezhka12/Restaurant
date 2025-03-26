@@ -4,7 +4,11 @@ using Shared.Exceptions;
 
 namespace Application.Tables.Commands.UpdateTableStatus;
 
-public class UpdateTableStatusCommandHandler(ITableRepository tableRepository)
+public record UpdateTableStatusCommand(
+    int Id,
+    bool IsFree) : IRequest;
+
+public class UpdateTableStatusCommandHandler(ITableRepository tableRepository, IApplicationDbContext dbContext)
     : IRequestHandler<UpdateTableStatusCommand>
 {
     public async Task Handle(UpdateTableStatusCommand request, CancellationToken cancellationToken)
@@ -19,5 +23,6 @@ public class UpdateTableStatusCommandHandler(ITableRepository tableRepository)
         table.IsFree = request.IsFree;
 
         await tableRepository.UpdateAsync(table, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

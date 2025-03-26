@@ -4,7 +4,11 @@ using Shared.Exceptions;
 
 namespace Application.Tables.Commands.UpdateTable;
 
-public class UpdateTableCommandHandler(ITableRepository tableRepository)
+public record UpdateTableCommand(
+    int Id,
+    int Seats) : IRequest;
+
+public class UpdateTableCommandHandler(ITableRepository tableRepository, IApplicationDbContext dbContext)
     : IRequestHandler<UpdateTableCommand>
 {
     public async Task Handle(UpdateTableCommand request, CancellationToken cancellationToken)
@@ -19,5 +23,6 @@ public class UpdateTableCommandHandler(ITableRepository tableRepository)
         table.Seats = request.Seats;
 
         await tableRepository.UpdateAsync(table, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

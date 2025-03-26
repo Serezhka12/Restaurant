@@ -6,6 +6,13 @@ using Shared.Exceptions;
 
 namespace Application.Staff.Commands.UpdateStaff;
 
+public record UpdateStaffCommand(
+    int Id,
+    string Name,
+    Roles Role,
+    int Salary,
+    List<DayOfWeek> WorkDays) : IRequest;
+
 public class UpdateStaffCommandHandler(IEmployeeRepository employeeRepository, IApplicationDbContext dbContext)
     : IRequestHandler<UpdateStaffCommand>
 {
@@ -30,5 +37,6 @@ public class UpdateStaffCommandHandler(IEmployeeRepository employeeRepository, I
         }
 
         await employeeRepository.UpdateAsync(staff, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

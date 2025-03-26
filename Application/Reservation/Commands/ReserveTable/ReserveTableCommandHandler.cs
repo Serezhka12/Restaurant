@@ -5,7 +5,11 @@ using Shared.Exceptions;
 
 namespace Application.Reservation.Commands.ReserveTable;
 
-public class ReserveTableCommandHandler(IReservationRepository reservationRepository)
+public record ReserveTableCommand(
+    int NumberOfPeople,
+    DateTime ReservationDate) : IRequest<int>;
+
+public class ReserveTableCommandHandler(IReservationRepository reservationRepository, IApplicationDbContext dbContext)
     : IRequestHandler<ReserveTableCommand, int>
 {
     public async Task<int> Handle(ReserveTableCommand request, CancellationToken cancellationToken)
@@ -31,6 +35,8 @@ public class ReserveTableCommandHandler(IReservationRepository reservationReposi
             NumberOfPeople = request.NumberOfPeople
         };
 
-        return await reservationRepository.AddAsync(reservation, cancellationToken);
+        var id = await reservationRepository.AddAsync(reservation, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return id;
     }
 }

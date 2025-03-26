@@ -10,6 +10,9 @@ public class TableReservationConfiguration : IEntityTypeConfiguration<TableReser
     {
         builder.HasKey(tr => tr.Id);
 
+        builder.Property(x => x.Id)
+            .UseIdentityColumn();
+
         builder.Property(tr => tr.ReservationDate)
             .IsRequired();
 

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Products.Commands.RemoveExpiredItems;
 
+public record RemoveExpiredItemsCommand : IRequest;
+
 public class RemoveExpiredItemsCommandHandler(IApplicationDbContext dbContext)
     : IRequestHandler<RemoveExpiredItemsCommand>
 {

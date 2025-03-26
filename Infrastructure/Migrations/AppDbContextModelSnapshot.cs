@@ -22,6 +22,83 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.Menu.Allergens", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Allergens");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Menu.MenuCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MenuCategories");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Menu.MenuPosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsVegan")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("MenuCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuCategoryId");
+
+                    b.ToTable("MenuPositions");
+                });
+
             modelBuilder.Entity("Domain.Entities.Products.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -36,8 +113,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<decimal>("MinimumQuantity")
+                        .ValueGeneratedOnAdd()
                         .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric(18,2)")
+                        .HasDefaultValue(0m);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -46,7 +125,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Unit")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
@@ -169,6 +249,47 @@ namespace Infrastructure.Migrations
                     b.ToTable("EmployeeWorkDays", (string)null);
                 });
 
+            modelBuilder.Entity("MenuPositionAllergens", b =>
+                {
+                    b.Property<int>("MenuPositionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AllergenId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MenuPositionId", "AllergenId");
+
+                    b.HasIndex("AllergenId");
+
+                    b.ToTable("MenuPositionAllergens", (string)null);
+                });
+
+            modelBuilder.Entity("MenuPositionProducts", b =>
+                {
+                    b.Property<int>("MenuPositionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MenuPositionId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("MenuPositionProducts", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Menu.MenuPosition", b =>
+                {
+                    b.HasOne("Domain.Entities.Menu.MenuCategory", "MenuCategory")
+                        .WithMany("Positions")
+                        .HasForeignKey("MenuCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MenuCategory");
+                });
+
             modelBuilder.Entity("Domain.Entities.Products.StorageItem", b =>
                 {
                     b.HasOne("Domain.Entities.Products.Product", "Product")
@@ -200,6 +321,41 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("MenuPositionAllergens", b =>
+                {
+                    b.HasOne("Domain.Entities.Menu.Allergens", null)
+                        .WithMany()
+                        .HasForeignKey("AllergenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Menu.MenuPosition", null)
+                        .WithMany()
+                        .HasForeignKey("MenuPositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MenuPositionProducts", b =>
+                {
+                    b.HasOne("Domain.Entities.Menu.MenuPosition", null)
+                        .WithMany()
+                        .HasForeignKey("MenuPositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Menu.MenuCategory", b =>
+                {
+                    b.Navigation("Positions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Products.Product", b =>

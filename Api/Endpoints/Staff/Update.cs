@@ -1,7 +1,7 @@
+using Api.Dtos.Staff;
 using Application.Staff.Commands.UpdateStaff;
 using MapsterMapper;
 using MediatR;
-using Shared.Dtos.Staff;
 
 namespace Api.Endpoints.Staff;
 

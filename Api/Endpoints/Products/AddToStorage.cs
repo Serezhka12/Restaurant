@@ -1,7 +1,7 @@
+using Api.Dtos.Products;
 using Application.Products.Commands.AddStorageItem;
 using MapsterMapper;
 using MediatR;
-using Shared.Dtos.Products;
 
 namespace Api.Endpoints.Products;
 

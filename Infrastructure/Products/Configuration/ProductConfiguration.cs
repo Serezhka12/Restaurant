@@ -9,21 +9,29 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.HasKey(p => p.Id);
-        
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn();
+
         builder.Property(p => p.Name)
             .IsRequired()
             .HasMaxLength(100);
-        
+
         builder.Property(p => p.Description)
             .HasMaxLength(500);
-        
+
+        builder.Property(p => p.Unit)
+            .IsRequired()
+            .HasMaxLength(20);
+
         builder.Property(p => p.MinimumQuantity)
             .IsRequired()
-            .HasPrecision(18, 2);
-        
+            .HasPrecision(18, 2)
+            .HasDefaultValue(0);
+
         builder.HasMany(p => p.StorageItems)
-            .WithOne(si => si.Product)
-            .HasForeignKey(si => si.ProductId)
+            .WithOne()
+            .HasForeignKey("ProductId")
             .OnDelete(DeleteBehavior.Cascade);
     }
-} 
+}

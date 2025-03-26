@@ -5,20 +5,16 @@ using Shared.Exceptions;
 
 namespace Application.Products.Commands.UseProduct;
 
-public class UseProductCommandHandler : IRequestHandler<UseProductCommand>
+public record UseProductCommand(
+    int ProductId,
+    decimal Quantity) : IRequest;
+
+public class UseProductCommandHandler(IProductRepository productRepository, IApplicationDbContext dbContext)
+    : IRequestHandler<UseProductCommand>
 {
-    private readonly IProductRepository _productRepository;
-    private readonly IApplicationDbContext _dbContext;
-
-    public UseProductCommandHandler(IProductRepository productRepository, IApplicationDbContext dbContext)
-    {
-        _productRepository = productRepository;
-        _dbContext = dbContext;
-    }
-
     public async Task Handle(UseProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+        var product = await productRepository.GetByIdAsync(request.ProductId, cancellationToken);
 
         if (product == null)
         {
@@ -51,6 +47,6 @@ public class UseProductCommandHandler : IRequestHandler<UseProductCommand>
             throw new InvalidOperationException($"Insufficient product in storage. Missing {remainingQuantity} {product.Unit}");
         }
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
