@@ -4,24 +4,26 @@ using MediatR;
 
 namespace Application.Menu.Commands.CreateMenuCategory;
 
-public class CreateMenuCategoryCommandHandler : IRequestHandler<CreateMenuCategoryCommand, int>
+public record CreateMenuCategoryCommand(
+    string Name,
+    bool IsAvailable) : IRequest<int>;
+
+public class CreateMenuCategoryCommandHandler(
+    IMenuCategoryRepository menuCategoryRepository,
+    IApplicationDbContext dbContext)
+    : IRequestHandler<CreateMenuCategoryCommand, int>
 {
-    private readonly IMenuCategoryRepository _menuCategoryRepository;
-
-    public CreateMenuCategoryCommandHandler(IMenuCategoryRepository menuCategoryRepository)
-    {
-        _menuCategoryRepository = menuCategoryRepository;
-    }
-
     public async Task<int> Handle(CreateMenuCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = new MenuCategory
         {
             Name = request.Name,
             IsAvailable = request.IsAvailable,
-            Positions = new List<MenuPosition>()
+            Positions = []
         };
 
-        return await _menuCategoryRepository.AddAsync(category, cancellationToken);
+        var id = await menuCategoryRepository.AddAsync(category, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return id;
     }
-} 
+}

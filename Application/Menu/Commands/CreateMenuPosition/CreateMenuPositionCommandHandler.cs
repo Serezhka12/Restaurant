@@ -5,28 +5,26 @@ using Shared.Exceptions;
 
 namespace Application.Menu.Commands.CreateMenuPosition;
 
-public class CreateMenuPositionCommandHandler : IRequestHandler<CreateMenuPositionCommand, int>
+public record CreateMenuPositionCommand(
+    string Name,
+    bool IsVegan,
+    bool IsAvailable,
+    List<int> AllergenIds,
+    int MenuCategoryId,
+    decimal Price,
+    List<int> ProductIds) : IRequest<int>;
+
+public class CreateMenuPositionCommandHandler(
+    IMenuPositionRepository menuPositionRepository,
+    IMenuCategoryRepository menuCategoryRepository,
+    IAllergensRepository allergensRepository,
+    IProductRepository productRepository,
+    IApplicationDbContext dbContext)
+    : IRequestHandler<CreateMenuPositionCommand, int>
 {
-    private readonly IMenuPositionRepository _menuPositionRepository;
-    private readonly IMenuCategoryRepository _menuCategoryRepository;
-    private readonly IAllergensRepository _allergensRepository;
-    private readonly IProductRepository _productRepository;
-
-    public CreateMenuPositionCommandHandler(
-        IMenuPositionRepository menuPositionRepository,
-        IMenuCategoryRepository menuCategoryRepository,
-        IAllergensRepository allergensRepository,
-        IProductRepository productRepository)
-    {
-        _menuPositionRepository = menuPositionRepository;
-        _menuCategoryRepository = menuCategoryRepository;
-        _allergensRepository = allergensRepository;
-        _productRepository = productRepository;
-    }
-
     public async Task<int> Handle(CreateMenuPositionCommand request, CancellationToken cancellationToken)
     {
-        var categoryExists = await _menuCategoryRepository.ExistsAsync(request.MenuCategoryId, cancellationToken);
+        var categoryExists = await menuCategoryRepository.ExistsAsync(request.MenuCategoryId, cancellationToken);
         if (!categoryExists)
         {
             throw new NotFoundException($"Категорія меню з ID {request.MenuCategoryId} не знайдена");
@@ -47,7 +45,7 @@ public class CreateMenuPositionCommandHandler : IRequestHandler<CreateMenuPositi
         {
             foreach (var allergenId in request.AllergenIds)
             {
-                var allergen = await _allergensRepository.GetByIdAsync(allergenId, cancellationToken);
+                var allergen = await allergensRepository.GetByIdAsync(allergenId, cancellationToken);
                 if (allergen == null)
                 {
                     throw new NotFoundException($"Алерген з ID {allergenId} не знайдений");
@@ -56,10 +54,16 @@ public class CreateMenuPositionCommandHandler : IRequestHandler<CreateMenuPositi
             }
         }
 
-        if (request.ProductIds.Count == 0) return await _menuPositionRepository.AddAsync(position, cancellationToken);
+        if (request.ProductIds.Count == 0)
+        {
+            var id = await menuPositionRepository.AddAsync(position, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return id;
+        }
+
         foreach (var productId in request.ProductIds)
         {
-            var product = await _productRepository.GetByIdAsync(productId, cancellationToken);
+            var product = await productRepository.GetByIdAsync(productId, cancellationToken);
             if (product == null)
             {
                 throw new NotFoundException($"Продукт з ID {productId} не знайдений");
@@ -67,6 +71,8 @@ public class CreateMenuPositionCommandHandler : IRequestHandler<CreateMenuPositi
             position.Products.Add(product);
         }
 
-        return await _menuPositionRepository.AddAsync(position, cancellationToken);
+        var positionId = await menuPositionRepository.AddAsync(position, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return positionId;
     }
 }

@@ -4,6 +4,7 @@ using Infrastructure.Menu;
 using Infrastructure.Products;
 using Infrastructure.Reservation;
 using Infrastructure.Staff;
+using Infrastructure.Tables;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -7,10 +7,10 @@ internal sealed class GetByCategory : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(Routes.Menu.PositionsByCategory, async (ISender sender, CancellationToken cancellationToken) =>
+        app.MapGet(Routes.Menu.GetMenu, async (ISender sender, CancellationToken cancellationToken) =>
         {
             var positionsByCategory = await sender.Send(new GetMenuPositionsByCategoryQuery(), cancellationToken);
             return Results.Ok(positionsByCategory);
         }).WithTags(Tags.Menu);
     }
-} 
+}

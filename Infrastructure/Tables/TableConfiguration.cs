@@ -2,7 +2,7 @@ using Domain.Entities.Reservation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Reservation.Configuration;
+namespace Infrastructure.Tables;
 
 public class TableConfiguration : IEntityTypeConfiguration<Table>
 {

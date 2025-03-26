@@ -3,7 +3,13 @@ using MediatR;
 
 namespace Application.Products.Commands.UpdateProduct;
 
-public class UpdateProductCommandHandler(IProductRepository productRepository) : IRequestHandler<UpdateProductCommand>
+public record UpdateProductCommand(
+    int Id,
+    string Name,
+    string Description,
+    decimal MinimumQuantity) : IRequest;
+
+public class UpdateProductCommandHandler(IProductRepository productRepository, IApplicationDbContext dbContext) : IRequestHandler<UpdateProductCommand>
 {
     public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
@@ -19,5 +25,6 @@ public class UpdateProductCommandHandler(IProductRepository productRepository) :
         product.MinimumQuantity = request.MinimumQuantity;
 
         await productRepository.UpdateAsync(product, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

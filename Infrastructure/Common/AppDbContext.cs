@@ -8,6 +8,7 @@ using Infrastructure.Reservation.Configuration;
 using Infrastructure.Staff.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Menu.Configuration;
+using Infrastructure.Tables;
 
 namespace Infrastructure.Common;
 

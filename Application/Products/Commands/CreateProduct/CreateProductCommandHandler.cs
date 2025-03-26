@@ -4,7 +4,13 @@ using MediatR;
 
 namespace Application.Products.Commands.CreateProduct;
 
-public class CreateProductCommandHandler(IProductRepository productRepository)
+public record CreateProductCommand(
+    string Name,
+    string Description,
+    string Unit,
+    decimal MinimumQuantity) : IRequest<int>;
+
+public class CreateProductCommandHandler(IProductRepository productRepository, IApplicationDbContext dbContext)
     : IRequestHandler<CreateProductCommand, int>
 {
     public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -17,6 +23,8 @@ public class CreateProductCommandHandler(IProductRepository productRepository)
             MinimumQuantity = request.MinimumQuantity
         };
 
-        return await productRepository.AddAsync(product, cancellationToken);
+        var id = await productRepository.AddAsync(product, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return id;
     }
 }

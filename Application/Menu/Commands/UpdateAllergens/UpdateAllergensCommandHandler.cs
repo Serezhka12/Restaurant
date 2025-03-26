@@ -4,18 +4,18 @@ using Shared.Exceptions;
 
 namespace Application.Menu.Commands.UpdateAllergens;
 
-public class UpdateAllergensCommandHandler : IRequestHandler<UpdateAllergensCommand>
+public record UpdateAllergensCommand(
+    int Id,
+    string Name) : IRequest;
+
+public class UpdateAllergensCommandHandler(
+    IAllergensRepository allergensRepository,
+    IApplicationDbContext dbContext)
+    : IRequestHandler<UpdateAllergensCommand>
 {
-    private readonly IAllergensRepository _allergensRepository;
-
-    public UpdateAllergensCommandHandler(IAllergensRepository allergensRepository)
-    {
-        _allergensRepository = allergensRepository;
-    }
-
     public async Task Handle(UpdateAllergensCommand request, CancellationToken cancellationToken)
     {
-        var allergen = await _allergensRepository.GetByIdAsync(request.Id, cancellationToken);
+        var allergen = await allergensRepository.GetByIdAsync(request.Id, cancellationToken);
         
         if (allergen == null)
         {
@@ -24,6 +24,7 @@ public class UpdateAllergensCommandHandler : IRequestHandler<UpdateAllergensComm
 
         allergen.Name = request.Name;
 
-        await _allergensRepository.UpdateAsync(allergen, cancellationToken);
+        await allergensRepository.UpdateAsync(allergen, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 } 

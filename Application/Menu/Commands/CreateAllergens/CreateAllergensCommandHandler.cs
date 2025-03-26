@@ -4,23 +4,23 @@ using MediatR;
 
 namespace Application.Menu.Commands.CreateAllergens;
 
-public class CreateAllergensCommandHandler : IRequestHandler<CreateAllergensCommand, int>
+public record CreateAllergensCommand(string Name) : IRequest<int>;
+
+public class CreateAllergensCommandHandler(
+    IAllergensRepository allergensRepository,
+    IApplicationDbContext dbContext)
+    : IRequestHandler<CreateAllergensCommand, int>
 {
-    private readonly IAllergensRepository _allergensRepository;
-
-    public CreateAllergensCommandHandler(IAllergensRepository allergensRepository)
-    {
-        _allergensRepository = allergensRepository;
-    }
-
     public async Task<int> Handle(CreateAllergensCommand request, CancellationToken cancellationToken)
     {
         var allergen = new Allergens
         {
             Name = request.Name,
-            Positions = new List<MenuPosition>()
+            Positions = []
         };
 
-        return await _allergensRepository.AddAsync(allergen, cancellationToken);
+        var id = await allergensRepository.AddAsync(allergen, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return id;
     }
-} 
+}

@@ -4,7 +4,11 @@ using MediatR;
 
 namespace Application.Tables.Commands.CreateTable;
 
-public class CreateTableCommandHandler(ITableRepository tableRepository)
+public record CreateTableCommand(
+    int Seats,
+    bool IsFree = true) : IRequest<int>;
+
+public class CreateTableCommandHandler(ITableRepository tableRepository, IApplicationDbContext dbContext)
     : IRequestHandler<CreateTableCommand, int>
 {
     public async Task<int> Handle(CreateTableCommand request, CancellationToken cancellationToken)
@@ -15,6 +19,8 @@ public class CreateTableCommandHandler(ITableRepository tableRepository)
             IsFree = request.IsFree,
         };
 
-        return await tableRepository.AddAsync(table, cancellationToken);
+        var id = await tableRepository.AddAsync(table, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return id;
     }
 }

@@ -4,24 +4,23 @@ using Shared.Exceptions;
 
 namespace Application.Menu.Commands.DeleteMenuPosition;
 
-public class DeleteMenuPositionCommandHandler : IRequestHandler<DeleteMenuPositionCommand>
+public record DeleteMenuPositionCommand(int Id) : IRequest;
+
+public class DeleteMenuPositionCommandHandler(
+    IMenuPositionRepository menuPositionRepository,
+    IApplicationDbContext dbContext)
+    : IRequestHandler<DeleteMenuPositionCommand>
 {
-    private readonly IMenuPositionRepository _menuPositionRepository;
-
-    public DeleteMenuPositionCommandHandler(IMenuPositionRepository menuPositionRepository)
-    {
-        _menuPositionRepository = menuPositionRepository;
-    }
-
     public async Task Handle(DeleteMenuPositionCommand request, CancellationToken cancellationToken)
     {
-        var exists = await _menuPositionRepository.ExistsAsync(request.Id, cancellationToken);
+        var exists = await menuPositionRepository.ExistsAsync(request.Id, cancellationToken);
         
         if (!exists)
         {
             throw new NotFoundException($"Позиція меню з ID {request.Id} не знайдена");
         }
 
-        await _menuPositionRepository.DeleteAsync(request.Id, cancellationToken);
+        await menuPositionRepository.DeleteAsync(request.Id, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 } 

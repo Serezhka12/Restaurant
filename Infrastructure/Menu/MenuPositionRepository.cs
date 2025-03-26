@@ -5,18 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Menu;
 
-public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
+public class MenuPositionRepository(AppDbContext context) : IMenuPositionRepository
 {
-    private readonly AppDbContext _context;
-
-    public MenuPositionRepository(AppDbContext context) : base(context)
-    {
-        _context = context;
-    }
-
     public async Task<MenuPosition?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _context.MenuPositions
+        return await context.MenuPositions
             .Include(x => x.MenuCategory)
             .Include(x => x.Allergens)
             .Include(x => x.Products)
@@ -25,7 +18,7 @@ public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
 
     public async Task<List<MenuPosition>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.MenuPositions
+        return await context.MenuPositions
             .Include(x => x.MenuCategory)
             .Include(x => x.Allergens)
             .Include(x => x.Products)
@@ -34,21 +27,20 @@ public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
 
     public async Task<int> AddAsync(MenuPosition position, CancellationToken cancellationToken = default)
     {
-        await _context.MenuPositions.AddAsync(position, cancellationToken);
-        await SaveChangesAsync(cancellationToken);
+        await context.MenuPositions.AddAsync(position, cancellationToken);
         return position.Id;
     }
 
     public async Task UpdateAsync(MenuPosition position, CancellationToken cancellationToken = default)
     {
-        var existingPosition = await _context.MenuPositions
+        var existingPosition = await context.MenuPositions
             .Include(x => x.Allergens)
             .Include(x => x.Products)
             .FirstOrDefaultAsync(x => x.Id == position.Id, cancellationToken);
 
         if (existingPosition != null)
         {
-            _context.Entry(existingPosition).CurrentValues.SetValues(position);
+            context.Entry(existingPosition).CurrentValues.SetValues(position);
 
             existingPosition.Allergens.Clear();
             foreach (var allergen in position.Allergens)
@@ -64,30 +56,27 @@ public class MenuPositionRepository : RepositoryBase, IMenuPositionRepository
         }
         else
         {
-            _context.MenuPositions.Update(position);
+            context.MenuPositions.Update(position);
         }
-
-        await SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        var position = await _context.MenuPositions.FindAsync(new object[] { id }, cancellationToken);
+        var position = await context.MenuPositions.FindAsync(new object[] { id }, cancellationToken);
         if (position != null)
         {
-            _context.MenuPositions.Remove(position);
-            await SaveChangesAsync(cancellationToken);
+            context.MenuPositions.Remove(position);
         }
     }
 
     public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _context.MenuPositions.AnyAsync(x => x.Id == id, cancellationToken);
+        return await context.MenuPositions.AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<List<MenuPosition>> GetAllByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
     {
-        return await _context.MenuPositions
+        return await context.MenuPositions
             .Where(p => p.MenuCategoryId == categoryId)
             .Include(x => x.Allergens)
             .Include(x => x.Products)
